@@ -9,11 +9,7 @@ Email:   moha3440@mylaurier.ca
 __updated__ = "2018-06-20"
 -------------------------------------------------------
 """
-import csv
-import numpy as np
-from sklearn.svm import SVR
 import matplotlib.pyplot as plt
-from sklearn import linear_model
 from sklearn.externals import joblib
 from random import randint
 from sentiment import sentiment_analysis
