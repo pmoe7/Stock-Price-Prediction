@@ -1,7 +1,7 @@
 # Stock-Price-Prediction
 Machine learning application created in Python which uses recurrent neural network (LSTM) for time-series predictions. Also, included twitter sentiment analysis for better accuracy.
 
-## Instructions
+## Libraries
 PIP Installl
 - Pandas
 - Numpy
@@ -9,5 +9,6 @@ PIP Installl
 - Tweepy
 - NLK
 
+## Instructions
  - Run model.py with the desired dataset, train the model, the model will be saved
  - Run predict.py to test the model and make predictions
