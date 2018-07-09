@@ -8,3 +8,6 @@ PIP Installl
 - Scikit Learn
 - Tweepy
 - NLK
+
+* Run model.py with the desired dataset, train the model, the model will be saved
+* Run predict.py to test the model and make predictions
