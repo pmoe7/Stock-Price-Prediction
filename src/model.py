@@ -14,12 +14,15 @@ import numpy as np
 from sklearn.svm import SVR
 import matplotlib.pyplot as plt
 from sklearn import linear_model
+from sklearn import preprocessing
+import stock_data
 #import matplotlib.animation as animation
 #from matplotlib import style
 #from googlefinance.client import get_price_data
 #from datetime import datetime
 from sklearn.externals import joblib
 
+scaler = preprocessing.StandardScaler()
 dates = []
 prices = []
 
@@ -45,19 +48,39 @@ def animate(symbol):
     return
 """
 
+
+def normalize_data(data):
+    np_data = np.array(data, dtype=float)
+    np_data = np_data.reshape(-1,1)
+    scaler.fit(np_data)
+    normalized = scaler.transform(np_data)
+    # inverse transform and print the first 5 rows
+    
+    return normalized
+
+def inverse_normalization(data):
+    inversed = scaler.inverse_transform(data)
+    
+    return inversed
+
+def format_dates(rows):
+    for row in rows:
+        #date=row[:4] + row[5:7] + row[8:]
+        date=row[5:7] + row[8:]
+        dates.append(int(date))
+
 def get_data(filename):
     with open(filename, 'r') as csvfile:
         csvFileReader = csv.reader(csvfile)
         next(csvFileReader)    # skipping column names
         for row in csvFileReader:
-            date = row[0].split('-')[1] + row[0].split('-')[2]
+            date = row.split('-')[1] + row[0].split('-')[2]
             dates.append(int(date))
             prices.append(float(row[4]))
     return
 
 def train_model(dates, prices):
     dates = np.reshape(dates,(len(dates), 1)) # converting to matrix of n X 1
-
     #svr_lin = SVR(kernel= 'linear', C= 1e3)
     #svr_poly = SVR(kernel= 'poly', degree= 2)
     svr_rbf = SVR(kernel= 'rbf', C= 1e3, gamma= 0.3) # defining the support vector regression models
@@ -87,6 +110,14 @@ def train_model(dates, prices):
     return #svr_rbf.predict(x)[0], regr.predict(x)[0]
     #svr_rbf.predict(x)[0], svr_lin.predict(x)[0], svr_poly.predict(x)[0]
 
-get_data('TSLA_annual.csv') # calling get_data method by passing the csv file to it'
+#get_data('TSLA_annual.csv') # calling get_data method by passing the csv file to it'
+
+data = stock_data.fetch_data("AAPL")
+prices = data['close']
+format_dates(data.index.values)
+#dates = normalize_data(dates)
+#prices = normalize_data(prices)
+#print(data.index.values)
+#print(dates)
 train_model(dates, prices)
 print("Finished Training Model...")

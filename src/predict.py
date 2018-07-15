@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from sklearn.externals import joblib
 from random import randint
 from sentiment import sentiment_analysis
+import stock_data
 
 def analysis(day, company, symbol):
     
@@ -54,34 +55,25 @@ def analysis(day, company, symbol):
     print()
     print("Price Analysis")
     print("-"*20)
+    latest_price = stock_data.fetch_price(symbol)
+    print("Latest Price: ", latest_price)
     
-    if p == 0:
-        weight = 20
-        print("Price will DEFINITLY FALL")
-    elif n == 0:
-        weight = -20
-        print("Price will DEFINITLY RISE")
-        
-    if p > n:
-        if p > ne:
-            weight = randint(5,10)
-            print("Price is HIGHLY likely to RISE")
+    if predicted_price < latest_price:
+        if p < 2 * ne:
+            print("Price is LIKELY to FALL.")
         else:
-            weight = randint(1,5)
-            print("Price is LIKELY to RISE")
-    elif n > p:
-        if n > ne:
-            weight = randint(-5,-10)
-            print("Price is HIGHLY likely to FALL")
-        else:
-            weight = randint(-1,-5)
-            print("Price is LIKELY to FALL")
+            print("Price MAY FALL or STAY the SAME.")
     else:
-        weight = randint(-1,1)
-        print("Price may RISE or FALL or stay the SAME")
+        if p > 2 * ne:
+            print("Price is LIKELY to RISE.")
+        else:
+            print("Price MAY RISE or STAY the SAME.")
+
         
     print("Price Prediction")
     print("-"*20)  
+    #inversed = inverse_normalization(predicted_price)
+    print("Actual Predicted Price: ", predicted_price)
     print("Predicted Price: {:.6} - {:.6}".format(predicted_price + randbias, predicted_price + weight))
     plt.show()
 
@@ -89,7 +81,7 @@ day = int(input("Enter the day (M/DD): "))
 company = input("Company:")
 symbol = input("Symbol:")
 
-for x in range(5):
+for x in range(1):
     analysis(day, company, symbol)
     
                 
